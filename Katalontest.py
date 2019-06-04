@@ -6,24 +6,28 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 from pyvirtualdisplay import Display
-import unittest, time, re
+
+import unittest, time, re ,bs4
 
 class AppDynamicsJob(unittest.TestCase):
     def setUp(self):
         # AppDynamics will automatically override this web driver
         # as documented in https://docs.appdynamics.com/display/PRO44/Write+Your+First+Script
         self.driver = webdriver.Chrome()
-        self.driver.implicitly_wait(30)
-        self.base_url = "https://www.katalon.com/"
+        self.driver.implicitly_wait(20)
+        self.base_url = "https://www.kocpc.com.tw/"
         self.verificationErrors = []
         self.accept_next_alert = True
     
     def test_app_dynamics_job(self):
         driver = self.driver
-        driver.get("https://www.katalon.com/")
+        driver.get("https://www.kocpc.com.tw/archives/262658")
         html = driver.page_source
-        print(str(html))
-        driver.find_element_by_link_text("Community").click()
+        #print(str(html))
+        soup = bs4.BeautifulSoup(html, "html.parser")
+        content = str(soup.find('div', {"id": "zi_ad_article_inread"}))
+        print(content)
+        #driver.find_element_by_link_text("Community").click()
         # ERROR: Caught exception [ERROR: Unsupported command [selectWindow | win_ser_1 | ]]
     
     def is_element_present(self, how, what):
